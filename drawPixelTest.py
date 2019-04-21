@@ -32,7 +32,7 @@ def rgbDiff(a,b):
 lastColor = None
 
 
-resolutionMultiplier = 2
+resolutionMultiplier = 1
 
 #size of the picture drawn. larger pictures are very slow to draw.
 size = (54*resolutionMultiplier, 54*resolutionMultiplier)
@@ -42,9 +42,10 @@ unprosPic = Image.open("inpic.jpg")
 
 pic = unprosPic.convert("RGB").resize(size, Image.ANTIALIAS)
 
-for x in range(0,108):
-    
-    for y in range(0,108):
+keyPic = []
+for x in range(0,54*resolutionMultiplier):
+    keyPic.insert(x,[])
+    for y in range(0,54*resolutionMultiplier):
 
         lowestDiff = [sys.maxsize,""]
         for key in colors.keys():
@@ -55,11 +56,12 @@ for x in range(0,108):
                 
                 lowestDiff[0], lowestDiff[1] = pixelDiff, key
                 
-        pic.putpixel((x,y),colors[lowestDiff[1]][2])                                                                                                              
+        pic.putpixel((x,y),colors[lowestDiff[1]][2])
+        keyPic[x].insert(y,lowestDiff[1])
         
                                                                                                                               
 pic.save("outpic.jpeg", "JPEG")
-input("IMAGE PROCESSING COMPLETE. DUMPING MODIFIED PICTURE TO 'outpic.jpeg'")
+input("IMAGE PROCESSING COMPLETE. DUMPING MODIFIED PICTURE TO 'outpic.jpeg'. AFTER SENDING ANY TEXT, YOU HAVE 5 SECONDS TO SWITCH TO A HAT IN TIME'S WINDOW.")
 test = ("ltblue", "red", "green", "blue","yellow","beige","brown","gray","white","black")
 
 def drawPixel(x,y,color, lastColor):
@@ -77,13 +79,13 @@ def drawPixel(x,y,color, lastColor):
     time.sleep(0.032)
     lastColor = color
     return lastColor
+###END OF DRAWPIXEL###
 
 time.sleep(5)
 for x in range(0, 54*resolutionMultiplier):
     mouse.release()
-    time.sleep(0.0)
     for y in range(0,54*resolutionMultiplier):
             
             quit() if keyboard.is_pressed('a') else print("Drawing x{} y{}".format(x,y))
-            lastColor = drawPixel(((x*13)//resolutionMultiplier)+610,((y*13)//resolutionMultiplier)+202,test[y%10],lastColor)
+            lastColor = drawPixel(((x*13)//resolutionMultiplier)+610,((y*13)//resolutionMultiplier)+202,keyPic[x][y],lastColor)
 mouse.release()
