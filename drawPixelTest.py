@@ -32,20 +32,20 @@ def rgbDiff(a,b):
 lastColor = None
 
 
-resolutionMultiplier = 1
+resolutionMultiplier = float(input("please inform the resolution multiplier (default is 54x54, recommended is multiplier is 2.)\n"))
 
 #size of the picture drawn. larger pictures are very slow to draw.
-size = (54*resolutionMultiplier, 54*resolutionMultiplier)
+size = (math.floor(54*resolutionMultiplier), math.floor(54*resolutionMultiplier))
 
 
-unprosPic = Image.open("inpic.jpg")
+unprosPic = Image.open(input("Please inform the name of the file (CaSe SENSitive!)\n"))
 
 pic = unprosPic.convert("RGB").resize(size, Image.ANTIALIAS)
 
 keyPic = []
-for x in range(0,54*resolutionMultiplier):
+for x in range(0,math.floor(54*resolutionMultiplier)):
     keyPic.insert(x,[])
-    for y in range(0,54*resolutionMultiplier):
+    for y in range(0,math.floor(54*resolutionMultiplier)):
 
         lowestDiff = [sys.maxsize,""]
         for key in colors.keys():
@@ -61,7 +61,7 @@ for x in range(0,54*resolutionMultiplier):
         
                                                                                                                               
 pic.save("outpic.jpeg", "JPEG")
-input("IMAGE PROCESSING COMPLETE. DUMPING MODIFIED PICTURE TO 'outpic.jpeg'. AFTER SENDING ANY TEXT, YOU HAVE 5 SECONDS TO SWITCH TO A HAT IN TIME'S WINDOW.")
+input("IMAGE PROCESSING COMPLETE. DUMPING MODIFIED PICTURE TO 'outpic.jpeg'. AFTER SENDING ANY TEXT, YOU HAVE 30 SECONDS TO SWITCH TO A HAT IN TIME'S WINDOW. PRESS 'a' AT ANY TIME TO ABORT THE OPERATION.")
 test = ("ltblue", "red", "green", "blue","yellow","beige","brown","gray","white","black")
 
 def drawPixel(x,y,color, lastColor):
@@ -81,10 +81,10 @@ def drawPixel(x,y,color, lastColor):
     return lastColor
 ###END OF DRAWPIXEL###
 
-time.sleep(5)
-for x in range(0, 54*resolutionMultiplier):
+time.sleep(30)
+for x in range(0, math.floor(54*resolutionMultiplier)):
     mouse.release()
-    for y in range(0,54*resolutionMultiplier):
+    for y in range(0,math.floor(54*resolutionMultiplier)):
             
             quit() if keyboard.is_pressed('a') else print("Drawing x{} y{}".format(x,y))
             lastColor = drawPixel(((x*13)//resolutionMultiplier)+610,((y*13)//resolutionMultiplier)+202,keyPic[x][y],lastColor)

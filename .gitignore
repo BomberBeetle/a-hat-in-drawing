@@ -1,2 +1,5 @@
-inpic.jpg
-outpic.jpg
+*.gif
+*.jpg
+*.png
+*.jpeg
+*.spec
