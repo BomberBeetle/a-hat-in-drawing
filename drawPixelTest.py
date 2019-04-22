@@ -57,13 +57,13 @@ def drawPixel(x,y,color, lastColor):
     if color != lastColor:
         mouse.release()
         mouse.move(colors[color][0],colors[color][1])
-        time.sleep(0.032)
+        time.sleep(0.064)
         mouse.hold()
         time.sleep(0.032)
         mouse.release()
         
     mouse.move(x+5,y+3)
-    time.sleep(0.032)
+    time.sleep(0.064)
     mouse.hold()
     time.sleep(0.032)
     lastColor = color
