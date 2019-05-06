@@ -7,24 +7,19 @@ from hitherdither import palette
 from hitherdither import ordered 
 from PIL import Image
 
-bayerMap =  [
-            [0,35,15],
-            [30,25,10],
-            [20,5,40],
-            ]
 #dictionary "ColorName": (xPos, yPos, (redVal, greenVal, blueVal))
 
 colors = {
-    "black" : (320,360,(0,0,0)),
-    "white" : (425,360,(255,255,255)),
-    "red" : (320,460,(249,79,79)),
-    "green": (425,460,(99,249,79)),
-    "blue": (320,560,(70,172,207)),
-    "yellow": (425,560,(255,207,99)),
-    "ltblue": (320,660,(133,243,198)),
-    "beige": (425,660,(255,229,194)),
-    "brown": (320,760,(172,116,68)),
-    "gray": (425,760,(122,119,154)),
+    "black" : (190,320,(0,0,0)),
+    "white" : (320,320,(255,255,255)),
+    "red" : (190,440,(249,79,79)),
+    "green": (320,440,(99,249,79)),
+    "blue": (190,560,(70,172,207)),
+    "yellow": (320,560,(255,207,99)),
+    "ltblue": (190,680,(133,243,198)),
+    "beige": (320,680,(255,229,194)),
+    "brown": (190,800,(172,116,68)),
+    "gray": (320,800,(122,119,154)),
     }
 
 hexPalette = [
@@ -56,7 +51,7 @@ def getMostSimilar(pixel, colors):
 def drawPixel(x,y,color, lastColor):
     if color != lastColor:
         mouse.release()
-        mouse.move(colors[color][0],colors[color][1])
+        mouse.move(colors[color][0]*xResMulti,colors[color][1]*yResMulti)
         time.sleep(0.064)
         mouse.hold()
         time.sleep(0.032)
@@ -71,14 +66,16 @@ def drawPixel(x,y,color, lastColor):
 
 #key of the last color used to draw something
 lastColor = None
-
+resString = input("Type the resolution of your game (XResolution x YResolution)").split('x')
+xResMulti = int(resString[0])/1920
+yResMulti = int(resString[1])/1080
 ditheringOrder = 2**int(input("inform the level of dithering (0 is no dithering)\n"))
 dithering = (ditheringOrder != 1)
 
-resolutionMultiplier = float(input("please inform the resolution multiplier (default is 54x54, recommended is multiplier is 2.)\n"))
+resolutionMultiplier = float(input("please inform the resolution multiplier (default is 53x53, recommended is multiplier is 2.)\n"))
 
 #size of the picture drawn. larger pictures are very slow to draw.
-size = (math.floor(54*resolutionMultiplier), math.floor(54*resolutionMultiplier))
+size = (math.floor(53*resolutionMultiplier), math.floor(53*resolutionMultiplier))
 
 
 unprosPic = Image.open(input("Please inform the name of the file (CaSe SENSitive!)\n"))
@@ -91,24 +88,27 @@ if dithering:
 
 keyPic = []
                 
-for x in range(0,math.floor(54*resolutionMultiplier)):
+for x in range(0,math.floor(53*resolutionMultiplier)):
     keyPic.insert(x,[])
-    for y in range(0,math.floor(54*resolutionMultiplier)):
+    for y in range(0,math.floor(53*resolutionMultiplier)):
         mostSimilar = getMostSimilar(pic.getpixel((x,y)),colors)
         if not dithering:
             pic.putpixel((x,y),colors[mostSimilar[1]][2])
         keyPic[x].insert(y,mostSimilar[1])
                                                                                                                               
 pic.save("outpic.jpeg", "JPEG")
-input("IMAGE PROCESSING COMPLETE. DUMPING MODIFIED PICTURE TO 'outpic.jpeg'. AFTER SENDING ANY TEXT, YOU HAVE 30 SECONDS TO SWITCH TO A HAT IN TIME'S WINDOW. PRESS 'a' AT ANY TIME TO ABORT THE OPERATION.")
+input("IMAGE PROCESSING COMPLETE. DUMPING MODIFIED PICTURE TO 'outpic.jpeg'. SWITCH TO A HAT IN TIME'S WINDOW and PRESS 'a' TO START (WARNING! SCREEN MUST BE FULLSCREEN!)PRESS 's' AT ANY TIME TO ABORT THE OPERATION.")
 test = ("ltblue", "red", "green", "blue","yellow","beige","brown","gray","white","black")
+while not keyboard.is_pressed('a'):
+    continue
 
 
-time.sleep(30)
-for x in range(0, math.floor(54*resolutionMultiplier)):
+for x in range(0, math.floor(53*resolutionMultiplier)):
     mouse.release()
-    for y in range(0,math.floor(54*resolutionMultiplier)):
+    for y in range(0,math.floor(53*resolutionMultiplier)):
             
-            quit() if keyboard.is_pressed('a') else print("Drawing x{} y{}".format(x,y))
-            lastColor = drawPixel(((x*13)//resolutionMultiplier)+610,((y*13)//resolutionMultiplier)+202,keyPic[x][y],lastColor)
+            quit() if keyboard.is_pressed('s') else print("Drawing x{} y{}".format(x,y))
+            xPos = math.floor(((x*16)//resolutionMultiplier+540)*xResMulti)
+            yPos = math.floor((((y*16)//resolutionMultiplier)+120)*yResMulti)
+            lastColor = drawPixel(xPos,yPos,keyPic[x][y],lastColor)
 mouse.release()
